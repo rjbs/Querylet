@@ -29,3 +29,4 @@ t/query.t
 t/to_dot.t
 t/to_file.t
 t/to_stdout.t
+LICENSE
