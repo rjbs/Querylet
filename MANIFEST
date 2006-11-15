@@ -8,9 +8,8 @@ lib/Querylet/Query.pm
 lib/Querylet/Input.pm
 lib/Querylet/Output.pm
 
-t/wafers.db
-
 t/00-load.t
+t/01-makedb.t
 t/as_bogus.t
 t/as_code.t
 t/as_csv.t
