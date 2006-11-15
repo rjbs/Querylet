@@ -12,7 +12,7 @@ Querylet - simplified queries for the non-programmer
 
 version 0.32
 
- $Id: Querylet.pm,v 1.20 2005/02/04 18:26:51 rjbs Exp $
+ $Id$
 
 =cut
 

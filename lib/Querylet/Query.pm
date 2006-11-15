@@ -11,7 +11,7 @@ Querylet::Query - renders and performs queries for Querylet
 
 version 0.32
 
- $Id: Query.pm,v 1.25 2005/02/04 18:26:51 rjbs Exp $
+ $Id$
 
 =cut
 
