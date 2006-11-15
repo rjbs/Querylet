@@ -1,5 +1,8 @@
 Revision history for Querylet
 
+0.322   2006-11-15
+        add prereq/skip to 01-makedb.t
+
 0.321   2006-11-14
         generate test data at test time; this should make tests pass again
         packaging improvements

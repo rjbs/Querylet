@@ -1,7 +1,14 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More;
+
+unless (eval { require DBD::SQLite }) {
+  plan skip_all => "these tests require SQLite";
+}
+
+plan tests => 1;
+
 use DBI;
 
 eval {
