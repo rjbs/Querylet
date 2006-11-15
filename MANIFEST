@@ -2,7 +2,6 @@ MANIFEST
 README
 Changes
 Makefile.PL
-META.yml
 
 lib/Querylet.pm
 lib/Querylet/Query.pm
@@ -11,7 +10,7 @@ lib/Querylet/Output.pm
 
 t/wafers.db
 
-t/00.load.t
+t/00-load.t
 t/as_bogus.t
 t/as_code.t
 t/as_csv.t
