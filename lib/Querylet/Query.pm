@@ -3,19 +3,23 @@ package Querylet::Query;
 use strict;
 use warnings;
 
+## no critic RequireCarping
+
+use Carp ();
+
 =head1 NAME
 
 Querylet::Query - renders and performs queries for Querylet
 
 =head1 VERSION
 
-version 0.32
+version 0.321
 
  $Id$
 
 =cut
 
-our $VERSION = '0.32';
+our $VERSION = '0.321';
 
 =head1 SYNOPSIS
 
@@ -107,7 +111,7 @@ This method sets the bind parameters, overwriting any existing parameters.
 
 =cut
 
-sub bind {
+sub bind { ## no critic Homonym
 	my ($self, @parameters) = @_;
 	$self->{bind_parameters} = [ @parameters ];
 }
@@ -430,7 +434,7 @@ and return them.
 
 =cut
 
-sub write {
+sub write { ## no critic Homonym
 	my ($self) = @_;
 
 	$self->write_type('stdout') unless $self->write_type;
@@ -458,7 +462,7 @@ sub write_output {
 	my $output = $self->output;
 
 	if (ref $output eq 'CODE') {
-		warn "using coderef output, but write_type set" if $self->write_type;
+		warn "using coderef output, but write_type set\n" if $self->write_type;
 		$output->($self->output_filename);
 	} else {
 		$self->write($self);
@@ -500,13 +504,13 @@ sub as_csv {
 	my $csv;
 	my $results = $q->results;
 	my $columns = $q->columns;
-	$csv = join(',', map { $q->header($_) } @$columns) . "\n";
+	$csv = join(q{,}, map { $q->header($_) } @$columns) . "\n";
 	foreach my $row (@$results) {
-		$csv .=
-			join(',',
-				map { (my $v=defined$_?$_:'')=~s/"/\\"/g; qq!"$v"! }
-				@$row{@$columns}
-			) . "\n";
+		$csv .= join(q{,},
+              map { (my $v = defined $_ ? $_ : q{}) =~ s/"/\\"/g; qq!"$v"! }
+              @$row{@$columns}
+            )
+         .  "\n";
 	}
 
 	return $csv;
@@ -588,7 +592,7 @@ sub to_file {
 			print $output_file $query->output;
 			close $output_file;
 		} else {
-			warn "can't open " . $query->output_filename . " for output";
+			warn "can't open " . $query->output_filename . " for output\n";
 			return;
 		}
 	}

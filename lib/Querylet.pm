@@ -185,12 +185,12 @@ assigned to C<$q>.
 
 =cut
 
-sub init { <<''
+sub init { <<'END_CODE'
 use strict;
 use warnings;
 use Querylet::Query;
 my $q ||= new Querylet::Query;
-
+END_CODE
 }
 
 =item C<< Querylet->set_dbh($text) >>
@@ -201,11 +201,11 @@ connect string to create a dbh.
 
 =cut
 
-sub set_dbh    { shift; <<""
+sub set_dbh    { shift; <<"END_CODE"
 use DBI;
 my \$dbh = DBI->connect(q|$_[0]|);
 \$q->set_dbh(\$dbh);
-
+END_CODE
 }
 
 =item C<< Querylet->set_query($sql_template) >>
@@ -225,12 +225,12 @@ parameters to push.)
 
 =cut
 
-sub bind_next_param { shift; <<""
+sub bind_next_param { shift; <<"END_CODE"
 {
-	my \$input = \$q->{input};
-	\$q->bind_more($_[0]);
+  my \$input = \$q->{input};
+  \$q->bind_more($_[0]);
 }
-
+END_CODE
 }
 
 =item C<< Querylet->set_query_vars(%values) >>
@@ -240,12 +240,12 @@ render the SQL query template.
 
 =cut
 
-sub set_query_vars { shift; <<""
+sub set_query_vars { shift; <<"END_CODE"
 {
-	my \$input = \$q->{input};
-	\$q->set_query_vars({$_[0]});
+  my \$input = \$q->{input};
+  \$q->set_query_vars({$_[0]});
 }
-
+END_CODE
 }
 
 =item C<< Querylet->set_option($option, $value) >>
@@ -257,9 +257,9 @@ sophisticated method will probably be implemented.  Someday.
 =cut
 
 sub set_option  { shift;
-	my ($option, $value) = @_;
-	$value =~ s/(^\s+|\s+$)//g;
-	"\$q->option(q{$option}, q{$value});\n"
+  my ($option, $value) = @_;
+  $value =~ s/(^\s+|\s+$)//g;
+  "\$q->option(q{$option}, q{$value});\n"
 }
 
 =item C<< Querylet->input($parameter) >>
@@ -310,11 +310,11 @@ row in the result set, aliasing C<$row> to the row on each iteration.
 
 =cut
 
-sub munge_rows { shift; <<"";
+sub munge_rows { shift; <<"END_CODE";
 foreach my \$row (\@{\$q->results}) {
-	$_[0]
+  $_[0]
 }
-
+END_CODE
 }
 
 =item C<< Querylet->delete_rows($text) >>
@@ -325,13 +325,13 @@ aliasing C<$row> to the row.
 
 =cut
 
-sub delete_rows { shift; <<"";
+sub delete_rows { shift; <<"END_CODE";
 my \@new_results;
 for my \$row (\@{\$q->results}) {
-	push \@new_results, \$row unless ($_[0]);
+  push \@new_results, \$row unless ($_[0]);
 }
 \$q->set_results([\@new_results]);
-
+END_CODE
 }
 
 =item C<< Querylet->munge_col($column, $text) >>
@@ -342,13 +342,13 @@ C<$column> value respectively.
 
 =cut
 
-sub munge_col  { shift; <<"";
+sub munge_col  { shift; <<"END_CODE";
 foreach my \$row (\@{\$q->results}) {
-	foreach my \$value (\$row->{$_[0]}) {
-		$_[1]
-	}
+  foreach my \$value (\$row->{$_[0]}) {
+    $_[1]
+  }
 }
-
+END_CODE
 }
 
 =item C<< Querylet->add_col($column, $text) >>
@@ -362,18 +362,18 @@ directive is ignored.
 
 =cut
 
-sub add_col  { shift; <<"";
+sub add_col  { shift; <<"END_CODE";
 if (exists \$q->results->[0]->{$_[0]}) {
-	warn "column $_[0] already exists; ignoring directive\n";
+  warn "column $_[0] already exists; ignoring directive\n";
 } else { 
-	push \@{\$q->columns}, '$_[0]';
-	foreach my \$row (\@{\$q->results}) {
-		for my \$value (\$row->{$_[0]}) {
-			$_[1]
-		}
-	}
+  push \@{\$q->columns}, '$_[0]';
+  foreach my \$row (\@{\$q->results}) {
+    for my \$value (\$row->{$_[0]}) {
+      $_[1]
+    }
+  }
 }
-
+END_CODE
 }
 
 =item C<< Querylet->delete_col($column) >>
@@ -382,12 +382,12 @@ This method returns Perl code, deleting the named column from the result set.
 
 =cut
 
-sub delete_col  { shift; <<"";
+sub delete_col  { shift; <<"END_CODE";
 \$q->set_columns( [ grep { \$_ ne "$_[0]" } \@{\$q->columns} ] );
 foreach my \$row (\@{\$q->results}) {
-	delete \$row->{$_[0]};
+  delete \$row->{$_[0]};
 }
-
+END_CODE
 }
 
 =item C<< Querylet->delete_cols($text) >>
@@ -401,11 +401,11 @@ columns, and C<$column>, which contains the name of the current column.
 
 sub delete_cols { my $class = shift; qq|
 for my \$column (\@{\$q->columns}) {
-	my \@values;
-	push \@values, \$_->{\$column} for \@{\$q->results};
-	if ($_[0]) {
-| .	 $class->delete_col('$column') . qq|
-	}
+  my \@values;
+  push \@values, \$_->{\$column} for \@{\$q->results};
+  if ($_[0]) {
+| .   $class->delete_col('$column') . qq|
+  }
 }
 |
 
@@ -427,13 +427,13 @@ every row in the result set.
 
 =cut
 
-sub munge_values { shift; <<"";
+sub munge_values { shift; <<"END_CODE";
 foreach my \$row (\@{\$q->results}) {
-	foreach my \$value (values \%\$row) {
-		$_[0]
-	}
+  foreach my \$value (values \%\$row) {
+    $_[0]
+  }
 }
-
+END_CODE
 }
 
 =item C<< Querylet->output >>
@@ -443,9 +443,9 @@ requested format, to the requested destination.
 
 =cut
 
-sub output { shift; <<''
+sub output { shift; <<'END_CODE'
 $q->write_output;
-
+END_CODE
 }
 
 =back
@@ -465,109 +465,109 @@ string is returned.  Otherwise, C<$text> is returned.
 my %ran;
 
 sub once {
-	my ($id, $text) = @_;
-	return '' if $ran{$id}++;
-	return $text || '';
+  my ($id, $text) = @_;
+  return q{} if $ran{$id}++;
+  return $text || '';
 }
 
 my $to_next = qr/(?=^\S|\Z)/;
 
 FILTER {
-	my ($class) = @_;
+  my ($class) = @_;
 
-	s/\r//g;
+  s/\r//g;
   s/\A/once('init',init)/egms;
 
-	s/^ database:\s*([^\n]+)
-	 /  $class->set_dbh($1)
-	 /egmsx;
+  s/^ database:\s*([^\n]+)
+   /  $class->set_dbh($1)
+   /egmsx;
 
-	s/^ query:\s*(.+?)
-	    $to_next
-	 /  $class->set_query($1)
-	 /egmsx;
-	
-	s/^ query\s+parameter:\s*(.+?)
-	    $to_next
-	 /  $class->bind_next_param($1);
-	 /egmsx;
+  s/^ query:\s*(.+?)
+      $to_next
+   /  $class->set_query($1)
+   /egmsx;
+  
+  s/^ query\s+parameter:\s*(.+?)
+      $to_next
+   /  $class->bind_next_param($1);
+   /egmsx;
 
-	s/^ munge\s+query:\s*(.+?)
-	    $to_next
-	 /  $class->set_query_vars($1);
-	 /egmsx;
+  s/^ munge\s+query:\s*(.+?)
+      $to_next
+   /  $class->set_query_vars($1);
+   /egmsx;
 
-	s/^ set\s+option\s+([\/A-Za-z0-9_]+):\s*(.+?)
-			$to_next
-	 /  $class->set_option($1,$2);
-	 /egmsx;
+  s/^ set\s+option\s+([\/A-Za-z0-9_]+):\s*(.+?)
+      $to_next
+   /  $class->set_option($1,$2);
+   /egmsx;
 
-	s/^ input:\s*([^\n]+)
-	 /  $class->input($1)
-	 /egmsx;
+  s/^ input:\s*([^\n]+)
+   /  $class->input($1)
+   /egmsx;
 
-	s/^ input\s+type:\s+(\w+)$
-	 /  $class->set_input_type($1);
-	 /egmsx;
+  s/^ input\s+type:\s+(\w+)$
+   /  $class->set_input_type($1);
+   /egmsx;
 
-	s/^ munge\s+rows:\s*(.+?)
-	    $to_next
-	 /  $class->munge_rows($1);
-	 /egmsx;
+  s/^ munge\s+rows:\s*(.+?)
+      $to_next
+   /  $class->munge_rows($1);
+   /egmsx;
 
-	s/^ delete\s+rows\s+where:\s*(.+?)
-	    $to_next
-	 /  $class->delete_rows($1);
-	 /egmsx;
+  s/^ delete\s+rows\s+where:\s*(.+?)
+      $to_next
+   /  $class->delete_rows($1);
+   /egmsx;
 
-	s/^ munge\s+all\s+values:\s*(.+?)
-	    $to_next
-	 /  $class->munge_values($1);
-	 /egmsx;
+  s/^ munge\s+all\s+values:\s*(.+?)
+      $to_next
+   /  $class->munge_values($1);
+   /egmsx;
 
-	s/^ munge\s+column\s+(\w+):\s*(.+?)
-	    $to_next
-	 /  $class->munge_col($1, $2);
-	 /egmsx;
+  s/^ munge\s+column\s+(\w+):\s*(.+?)
+      $to_next
+   /  $class->munge_col($1, $2);
+   /egmsx;
 
-	s/^ add\s+column\s+(\w+):\s*(.+?)
-	    $to_next
-	 /  $class->add_col($1, $2);
-	 /egmsx;
+  s/^ add\s+column\s+(\w+):\s*(.+?)
+      $to_next
+   /  $class->add_col($1, $2);
+   /egmsx;
 
-	s/^ delete\s+column\s+(\w+)$
-	 /  $class->delete_col($1);
-	 /egmsx;
+  s/^ delete\s+column\s+(\w+)$
+   /  $class->delete_col($1);
+   /egmsx;
 
-	s/^ delete\s+columns\s+where:\s*(.+?)
-	    $to_next
-	 /  $class->delete_cols($1);
-	 /egmsx;
+  s/^ delete\s+columns\s+where:\s*(.+?)
+      $to_next
+   /  $class->delete_cols($1);
+   /egmsx;
 
-	s/^ column\s+headers?:\s*(.+?)
-	    $to_next
-	 /  $class->column_headers($1);
-	 /egmsx;
+  s/^ column\s+headers?:\s*(.+?)
+      $to_next
+   /  $class->column_headers($1);
+   /egmsx;
 
-	s/^ output\s+format:\s+(\w+)$
-	 /  $class->set_output_type($1);
-	 /egmsx;
+  s/^ output\s+format:\s+(\w+)$
+   /  $class->set_output_type($1);
+   /egmsx;
 
-	s/^ output\s+method:\s+(\w+)$
-	 /  $class->set_output_method($1);
-	 /egmsx;
+  s/^ output\s+method:\s+(\w+)$
+   /  $class->set_output_method($1);
+   /egmsx;
 
-	s/^ output\s+file:\s+([_.A-Za-z0-9]+)$
-	 /  $class->set_output_filename($1);
-	 /egmsx;
+  s/^ output\s+file:\s+([_.A-Za-z0-9]+)$
+   /  $class->set_output_filename($1);
+   /egmsx;
 
-	s/^ no\s+output$
-	 /  once('output', '')
-	 /egmsx;
+  s/^ no\s+output$
+   /  once('output', q{})
+   /egmsx;
 
-	s/\Z
-	 /once('output',output)
-	 /egmsx;
+  s/\Z
+   /once('output',output)
+   /egmsx;
 }
 
 =back

@@ -1,5 +1,9 @@
 Revision history for Querylet
 
+0.321   2006-11-14
+        generate test data at test time; this should make tests pass again
+        packaging improvements
+
 0.32    2005-02-04
         added "write handlers" to change how rendered output is written
 
