@@ -7,6 +7,7 @@ WriteMakefile(
     AUTHOR              => 'Ricardo SIGNES <rjbs@cpan.org>',
     VERSION_FROM        => 'lib/Querylet.pm',
     ABSTRACT_FROM       => 'lib/Querylet.pm',
+    LICENSE             => 'perl',
     PL_FILES            => {},
     PREREQ_PM => {
         'DBI'            => 1,

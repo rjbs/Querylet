@@ -1,5 +1,8 @@
 Revision history for Querylet
 
+0.323   2006-11-16
+        machine readable license added
+
 0.322   2006-11-15
         add prereq/skip to 01-makedb.t
 

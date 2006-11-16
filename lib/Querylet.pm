@@ -10,13 +10,13 @@ Querylet - simplified queries for the non-programmer
 
 =head1 VERSION
 
-version 0.322
+version 0.323
 
  $Id$
 
 =cut
 
-our $VERSION = '0.322';
+our $VERSION = '0.323';
 
 =head1 SYNOPSIS
 

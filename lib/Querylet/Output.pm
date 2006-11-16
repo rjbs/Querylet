@@ -11,13 +11,13 @@ Querylet::Output - generic output handler for Querlet::Query
 
 =head1 VERSION
 
-version 0.26
+version 0.260
 
  $Id$
 
 =cut
 
-our $VERSION = '0.26';
+our $VERSION = '0.260';
 
 =head1 SYNOPSIS
 
