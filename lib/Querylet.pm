@@ -474,7 +474,7 @@ FILTER {
   my ($class) = @_;
 
   s/\r//g;
-  s/\A/once('init',init)/egms;
+  s/\A/"\n" . once('init',init)/egms;
 
   s/^ database:\s*([^\n]+)
    /  $class->set_dbh($1)
