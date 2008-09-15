@@ -10,13 +10,11 @@ Querylet - simplified queries for the non-programmer
 
 =head1 VERSION
 
-version 0.323
-
- $Id$
+version 0.324
 
 =cut
 
-our $VERSION = '0.323';
+our $VERSION = '0.324';
 
 =head1 SYNOPSIS
 
@@ -470,7 +468,7 @@ sub once {
   return $text || '';
 }
 
-my $to_next = qr/(?=^\S|\Z)/;
+my $to_next = qr/(?=^\S|\Z)/sm;
 
 FILTER {
   my ($class) = @_;
