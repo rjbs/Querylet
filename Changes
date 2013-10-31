@@ -1,7 +1,12 @@
 Revision history for Querylet
 
+{{$NEXT}}
+
+0.400     2013-10-30 22:30:27 America/New_York
+        - repackage with Dist::Zilla
+
 0.324   2008-09-14
-        fix regex for Perl5 v10 
+        fix regex for Perl5 v10
 
 0.323   2006-11-16
         machine readable license added
