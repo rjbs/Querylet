@@ -2,6 +2,9 @@ Revision history for Querylet
 
 {{$NEXT}}
 
+0.401     2013-10-30 22:34:45 America/New_York
+        - fix spelling of repo!  oops
+
 0.400     2013-10-30 22:30:27 America/New_York
         - repackage with Dist::Zilla
 
