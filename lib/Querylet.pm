@@ -1,20 +1,8 @@
+use strict;
+use warnings;
 package Querylet;
 use Filter::Simple;
-
-use warnings;
-use strict;
-
-=head1 NAME
-
-Querylet - simplified queries for the non-programmer
-
-=head1 VERSION
-
-version 0.324
-
-=cut
-
-our $VERSION = '0.324';
+# ABSTRACT: simplified queries for the non-programmer
 
 =head1 SYNOPSIS
 
@@ -175,7 +163,9 @@ It rewrites the querylet to use the Querylet::Query class to perform its work.
 
 =over 4
 
-=item C<< Querylet->init >>
+=item init
+
+  Querylet->init;
 
 The C<init> method is called to generate a header for the querylet, importing
 needed modules and creating the Query object.  By default, the Query object is
@@ -191,7 +181,9 @@ my $q ||= new Querylet::Query;
 END_CODE
 }
 
-=item C<< Querylet->set_dbh($text) >>
+=item set_dbh
+
+  Querylet->set_dbh($text);
 
 This method returns Perl code to set the database handle to be used by the
 Query object.  The default implementation will attempt to use $text as a DBI
@@ -206,7 +198,9 @@ my \$dbh = DBI->connect(q|$_[0]|);
 END_CODE
 }
 
-=item C<< Querylet->set_query($sql_template) >>
+=item set_query
+
+  Querylet->set_query($sql_template);
 
 This method returns Perl code to set the Query object's SQL query to the passed
 value.
@@ -215,7 +209,9 @@ value.
 
 sub set_query  { shift; "\$q->set_query(q{$_[0]});\n"; }
 
-=item C<< Querylet->bind_next_param($text) >>
+=item bind_next_param
+
+  Querylet->bind_next_param($text)
 
 This method produces Perl code to push the given parameters onto the list of
 bind parameters for the query.  (The text should evaluate to a list of
@@ -231,7 +227,9 @@ sub bind_next_param { shift; <<"END_CODE"
 END_CODE
 }
 
-=item C<< Querylet->set_query_vars(%values) >>
+=item set_query_vars
+
+  Querylet->set_query_vars(%values);
 
 This method returns Perl code to set the template variables to be used to
 render the SQL query template.
@@ -246,7 +244,9 @@ sub set_query_vars { shift; <<"END_CODE"
 END_CODE
 }
 
-=item C<< Querylet->set_option($option, $value) >>
+=item set_option
+
+  Querylet->set_option($option, $value);
 
 This method returns Perl code to set the named query option to the given value.
 At present, this works by using the Querylet::Query scratchpad, but a more
@@ -260,7 +260,9 @@ sub set_option  { shift;
   "\$q->option(q{$option}, q{$value});\n"
 }
 
-=item C<< Querylet->input($parameter) >>
+=item input
+
+  Querylet->input($parameter);
 
 This method returns code to instruct the Query object to get an input parameter
 with the given name.
@@ -269,7 +271,9 @@ with the given name.
 
 sub input { shift; "\$q->input(q{$_[0]});\n"; }
 
-=item C<< Querylet->set_input_type($type) >>
+=item set_input_type
+
+  Querylet->set_input_type($type);
 
 This method returns Perl code to set the input format.
 
@@ -277,7 +281,9 @@ This method returns Perl code to set the input format.
 
 sub set_input_type { shift; "\$q->input_type(q{$_[0]});\n"; }
 
-=item C<< Querylet->set_output_filename($filename) >>
+=item set_output_filename
+
+  Querylet->set_output_filename($filename);
 
 This method returns Perl code to set the output filename.
 
@@ -285,7 +291,9 @@ This method returns Perl code to set the output filename.
 
 sub set_output_filename { shift; "\$q->output_filename(q{$_[0]});\n"; }
 
-=item C<< Querylet->set_output_method($type) >>
+=item set_output_method
+
+  Querylet->set_output_method($type);
 
 This method returns Perl code to set the output method.
 
@@ -293,7 +301,9 @@ This method returns Perl code to set the output method.
 
 sub set_output_method { shift; "\$q->write_type(q{$_[0]});\n"; }
 
-=item C<< Querylet->set_output_type($type) >>
+=item set_output_type
+
+  Querylet->set_output_type($type);
 
 This method returns Perl code to set the output format.
 
@@ -301,7 +311,9 @@ This method returns Perl code to set the output format.
 
 sub set_output_type { shift; "\$q->output_type(q{$_[0]});\n"; }
 
-=item C<< Querylet->munge_rows($text) >>
+=item munge_rows
+
+  Querylet->munge_rows($text);
 
 This method returns Perl code to execute the Perl given in C<$text> for every
 row in the result set, aliasing C<$row> to the row on each iteration.
@@ -315,7 +327,9 @@ foreach my \$row (\@{\$q->results}) {
 END_CODE
 }
 
-=item C<< Querylet->delete_rows($text) >>
+=item delete_rows
+
+  Querylet->delete_rows($text);
 
 This method returns Perl code to delete from the result set any row for which
 C<$text> evaluates true.  The code iterates over every row in the result set,
@@ -332,7 +346,9 @@ for my \$row (\@{\$q->results}) {
 END_CODE
 }
 
-=item C<< Querylet->munge_col($column, $text) >>
+=item munge_col
+
+  Querylet->munge_col($column, $text);
 
 This method returns Perl code to evaluate the Perl code given in C<$text> for
 each row, with the variables C<$row> and C<$value> aliased to the row and it's
@@ -349,7 +365,9 @@ foreach my \$row (\@{\$q->results}) {
 END_CODE
 }
 
-=item C<< Querylet->add_col($column, $text) >>
+=item add_col
+
+  Querylet->add_col($column, $text);
 
 This method returns Perl code, adding a column with the given name.  The Perl
 given in C<$text> is evaluated for each row, with the variables C<$row> and
@@ -374,7 +392,9 @@ if (exists \$q->results->[0]->{$_[0]}) {
 END_CODE
 }
 
-=item C<< Querylet->delete_col($column) >>
+=item delete_col
+
+  Querylet->delete_col($column);
 
 This method returns Perl code, deleting the named column from the result set.
 
@@ -388,7 +408,9 @@ foreach my \$row (\@{\$q->results}) {
 END_CODE
 }
 
-=item C<< Querylet->delete_cols($text) >>
+=item delete_cols
+
+  Querylet->delete_cols($text);
 
 This method returns Perl code to delete from the result set any row for which
 C<$text> evaluates true.  The code iterates over every column in the result
@@ -409,7 +431,9 @@ for my \$column (\@{\$q->columns}) {
 
 }
 
-=item C<< Querylet->column_headers($text) >>
+=item column_headers
+
+  Querylet->column_headers($text);
 
 This method returns Perl code to set up column headers.  The C<$text> should be
 Perl code describing a hash of column-header pairs.
@@ -418,7 +442,9 @@ Perl code describing a hash of column-header pairs.
 
 sub column_headers { my $class = shift; "\$q->set_headers({ $_[0] });" }
 
-=item C<< Querylet->munge_values($text) >>
+=item munge_values
+
+  Querylet->munge_values($text);
 
 This method returns Perl code to perform the code in C<$text> on every value in
 every row in the result set.
@@ -434,7 +460,9 @@ foreach my \$row (\@{\$q->results}) {
 END_CODE
 }
 
-=item C<< Querylet->output >>
+=item output
+
+  Querylet->output;
 
 This returns the Perl instructing the Query to output its results in the
 requested format, to the requested destination.
@@ -452,7 +480,9 @@ END_CODE
 
 =over 4
 
-=item C<< once($id, $text) >>
+=item once
+
+  once($id, $text);
 
 This is a little utility function, used to ensure that a bit of text is only
 included once.  If it has been called before with the given C<$id>, an empty
@@ -484,7 +514,7 @@ FILTER {
       $to_next
    /  $class->set_query($1)
    /egmsx;
-  
+
   s/^ query\s+parameter:\s*(.+?)
       $to_next
    /  $class->bind_next_param($1);
@@ -573,24 +603,6 @@ FILTER {
 =head1 SEE ALSO
 
 L<Querylet::Query>
-
-=head1 AUTHOR
-
-Ricardo SIGNES, C<< <rjbs@cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-querylet@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org>.  I will be notified, and then you'll automatically be
-notified of progress on your bug as I make changes.
-
-=head1 COPYRIGHT
-
-Copyright 2004-2006, Ricardo SIGNES, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
 
 =cut
 

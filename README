@@ -1,7 +1,0 @@
-README for Querylet
-
-Querylet provides a simple syntax for writing Perl-enhanced SQL queries with
-multiple output methods.  It processes and renders a template SQL query, then
-processes the query results before returning them to the user.
-
-The results can be returned in various formats.

@@ -1,21 +1,9 @@
-package Querylet::Output;
-
 use strict;
 use warnings;
+package Querylet::Output;
+# ABSTRACT: generic output handler for Querlet::Query
 
 use Carp;
-
-=head1 NAME
-
-Querylet::Output - generic output handler for Querlet::Query
-
-=head1 VERSION
-
-version 0.324
-
-=cut
-
-our $VERSION = '0.324';
 
 =head1 SYNOPSIS
 
@@ -78,7 +66,7 @@ sub import {
 
 =over 4
 
-=item C<< default_type >>
+=item default_type
 
 This method returns the name of the type for which the output handler will be
 registered if no override is given.
@@ -87,7 +75,7 @@ registered if no override is given.
 
 sub default_type { croak "default_type method unimplemented" }
 
-=item C<< handler >>
+=item handler
 
 This method returns a reference to the handler, which will be used to register
 the handler.
@@ -97,24 +85,6 @@ the handler.
 sub handler { croak "handler method unimplemented" }
 
 =back
-
-=head1 AUTHOR
-
-Ricardo SIGNES, C<< <rjbs@cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-querylet@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org>.  I will be notified, and then you'll automatically be
-notified of progress on your bug as I make changes.
-
-=head1 COPYRIGHT
-
-Copyright 2004 Ricardo SIGNES, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
 
 =cut
 

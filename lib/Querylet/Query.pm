@@ -1,23 +1,11 @@
-package Querylet::Query;
-
 use strict;
 use warnings;
+package Querylet::Query;
+# ABSTRACT: renders and performs queries for Querylet
 
 ## no critic RequireCarping
 
 use Carp ();
-
-=head1 NAME
-
-Querylet::Query - renders and performs queries for Querylet
-
-=head1 VERSION
-
-version 0.324
-
-=cut
-
-our $VERSION = '0.324';
 
 =head1 SYNOPSIS
 
@@ -64,7 +52,9 @@ written by Querylet, but there you have it.
 
 =over 4
 
-=item C<< Querylet::Query->new >>
+=item new
+
+  Querylet::Query->new;
 
 This creates and returns a new Querylet::Query.
 
@@ -78,7 +68,9 @@ sub new {
 	} => (shift);
 }
 
-=item C<< $q->set_dbh($dbh) >>
+=item set_dbh
+
+  $q->set_dbh($dbh);
 
 This method sets the database handle to be used for running the query.
 
@@ -90,7 +82,9 @@ sub set_dbh {
 	$self->{dbh} = $dbh;
 }
 
-=item C<< $q->set_query($query) >>
+=item set_query
+
+  $q->set_query($query);
 
 This method sets the query to run.  The query may be a plain SQL query or a
 template to be rendered later.
@@ -103,7 +97,9 @@ sub set_query {
 	$self->{query} = $sql;
 }
 
-=item C<< $q->bind(@parameters) >>
+=item bind
+
+  $q->bind(@parameters);
 
 This method sets the bind parameters, overwriting any existing parameters.
 
@@ -114,7 +110,9 @@ sub bind { ## no critic Homonym
 	$self->{bind_parameters} = [ @parameters ];
 }
 
-=item C<< $q->bind_more(@parameters) >>
+=item bind_more
+
+  $q->bind_more(@parameters);
 
 This method pushes the given parameters onto the list of bind parameters to use
 when executing the query.
@@ -126,7 +124,9 @@ sub bind_more {
 	push @{$self->{bind_parameters}}, @parameters;
 }
 
-=item C<< $q->set_query_vars(\%variables) >>
+=item set_query_vars
+
+  $q->set_query_vars(\%variables);
 
 This method sets the given variables, to be used when rendering the query.
 It also indicates that the query that was given is a template, and should be
@@ -145,7 +145,9 @@ sub set_query_vars {
 	$self->{query_vars} = { %{$self->{query_vars}}, %$vars };
 }
 
-=item C<< $q->render_query >>
+=item render_query
+
+  $q->render_query;
 
 This method renders the query using a templating engine (Template Toolkit, by
 default) and returns the result.  This method is called internally by the run
@@ -166,7 +168,9 @@ sub render_query {
 	return $rendered_query;
 }
 
-=item C<< $q->run >>
+=item run
+
+  $q->run;
 
 This method runs the query and sets up the results.  It is called internally by
 the results method, if the query has not yet been run.
@@ -188,7 +192,9 @@ sub run {
 	$self->{results} = $sth->fetchall_arrayref({});
 }
 
-=item C<< $q->results >>
+=item results
+
+  $q->results;
 
 This method returns the results of the query, first running the query (by
 calling C<run>) if needed.
@@ -204,7 +210,9 @@ sub results {
 	$self->run;
 }
 
-=item C<< $q->set_results( \@new_results ) >>
+=item set_results
+
+  $q->set_results( \@new_results );
 
 This method replaces the result set with the provided results.  This method
 does not call the results method, so if the query has not been run, it will not
@@ -217,7 +225,9 @@ sub set_results {
 	$self->{results} = shift;
 }
 
-=item C<< $q->columns >>
+=item columns
+
+  $q->columns;
 
 This method returns the column names (as an arrayref) for the query's results.
 The query will first be run (by calling C<run>) if needed.
@@ -231,7 +241,9 @@ sub columns {
 	return $self->{columns};
 }
 
-=item C<< $q->set_columns( \@new_columns ) >>
+=item set_columns
+
+  $q->set_columns( \@new_columns );
 
 This method replaces the list of column names for the current query result.  It
 does not call the columns method, so if the query has not been run, it will not
@@ -244,7 +256,9 @@ sub set_columns {
 	$self->{columns} = shift;
 }
 
-=item C<< $q->header( $column ) >>
+=item header
+
+  $q->header( $column );
 
 This method returns the header name for the given column, or the column name,
 if none is defined.
@@ -259,7 +273,9 @@ sub header {
 		: $column;
 }
 
-=item C<< $q->set_headers( \%headers ) >>
+=item set_headers
+
+  $q->set_headers( \%headers );
 
 This method sets up header names for columns.  It's passed a list of
 column-header pairs, which it stores for lookup with the C<header> method.
@@ -274,7 +290,9 @@ sub set_headers {
 	}
 }
 
-=item C<< $q->option($option_name) >>
+=item option
+
+  $q->option($option_name);
 
 This method returns the named option's value.  At present, this just retrieves
 a scratchpad entry.
@@ -287,7 +305,9 @@ sub option {
 	return $self->scratchpad->{$option_name} = $_[2];
 }
 
-=item C<< $q->scratchpad >>
+=item scratchpad
+
+  $q->scratchpad;
 
 This method returns a reference to a hash for general-purpose note-taking.
 I've put this here for really simple, mediocre communication between handlers.
@@ -301,7 +321,9 @@ sub scratchpad {
 	return $self->{scratchpad};
 }
 
-=item C<< $q->input_type($type) >>
+=item input_type
+
+  $q->input_type($type);
 
 This method sets or retrieves the input type, which is used to find the input
 handler.
@@ -316,7 +338,9 @@ sub input_type {
 	return $self->{input_type} = shift;
 }
 
-=item C<< $q->input($parameter) >>
+=item input
+
+  $q->input($parameter);
 
 This method tells the Query to ask the current input handler to request that
 the named parameter be received from input.
@@ -337,7 +361,9 @@ sub input {
 	}
 }
 
-=item C<< Querylet::Query->register_input_handler($type => \&handler) >>
+=item register_input_handler
+
+  Querylet::Query->register_input_handler($type => \&handler);
 
 This method registers an input handler routine for the given type.
 
@@ -352,7 +378,9 @@ sub register_input_handler {
 	$input_handler{$type} = $handler;
 }
 
-=item C<< $q->output_filename($filename) >>
+=item output_filename
+
+  $q->output_filename($filename);
 
 This method sets a filename to which output should be directed.
 
@@ -371,7 +399,9 @@ sub output_filename {
 	return $self->{output_filename} = $filename;
 }
 
-=item C<< $q->write_type($type) >>
+=item write_type
+
+  $q->write_type($type);
 
 This method sets or retrieves the write-out method for the query.
 
@@ -385,7 +415,9 @@ sub write_type {
 	return $self->{write_type} = shift;
 }
 
-=item C<< $q->output_type($type) >>
+=item output_type
+
+  $q->output_type($type);
 
 This method sets or retrieves the format of the output to be generated.
 
@@ -399,7 +431,9 @@ sub output_type {
 	return $self->{output_type} = shift;
 }
 
-=item C<< $q->output >>
+=item output
+
+  $q->output;
 
 This method tells the Query to send the current results to the proper output
 handler and return them.  If the outputs have already been generated, they are
@@ -425,7 +459,9 @@ sub output {
 	}
 }
 
-=item C<< $q->write >>
+=item write
+
+  $q->write;
 
 This method tells the Query to send its formatted output to the writing handler
 and return them.
@@ -445,7 +481,9 @@ sub write { ## no critic Homonym
 	}
 }
 
-=item C<< $q->write_output >>
+=item write_output
+
+  $q->write_output;
 
 This method tells the Query to write the query output.  If no filename has been
 set for output, the results are just printed.
@@ -467,7 +505,9 @@ sub write_output {
 	}
 }
 
-=item C<< Querylet::Query->register_output_handler($type => \&handler) >>
+=item register_output_handler
+
+  Querylet::Query->register_output_handler($type => \&handler);
 
 This method registers an output handler routine for the given type.  (The
 prototype sort of documents itself, doesn't it?)
@@ -485,7 +525,9 @@ sub register_output_handler {
 	$output_handler{$type} = $handler;
 }
 
-=item C<< as_csv($q) >>
+=item as_csv
+
+  as_csv($q);
 
 This is the default, built-in output handler.  It outputs the results of the
 query as a CSV file.  That is, a series of comma-delimited fields, with each
@@ -514,7 +556,9 @@ sub as_csv {
 	return $csv;
 }
 
-=item C<< as_template >>
+=item as_template
+
+  as_template($q);
 
 This is the default, built-in output handler.  It outputs the results of the
 query by rendering a template using Template Toolkit.  If the option
@@ -559,7 +603,9 @@ END
 	return $output;
 }
 
-=item C<< Querylet::Query->register_write_handler($type => \&handler) >>
+=item register_write_handler
+
+  Querylet::Query->register_write_handler($type => \&handler);
 
 This method registers a write handler routine for the given type.
 
@@ -574,7 +620,7 @@ sub register_write_handler {
 	$write_handler{$type} = $handler;
 }
 
-=item C<< to_file >>
+=item to_file
 
 This write handler sends the output to a file on the disk.
 
@@ -596,7 +642,7 @@ sub to_file {
 	}
 }
 
-=item C<< to_stdout >>
+=item to_stdout
 
 This write handler sends the output to the currently selected output stream.
 
@@ -608,7 +654,7 @@ sub to_stdout {
 	print $query->output || '';
 }
 
-=item C<< from_term($q, $parameter) >>
+=item from_term($q, $parameter)
 
 This is a simple built-in input handler to prompt the user interactively for
 parameter inputs.  It is the default input handler.
@@ -630,24 +676,6 @@ sub from_term {
 =head1 SEE ALSO
 
 L<Querylet>, L<Querylet::Input>, L<Querylet::Output>
-
-=head1 AUTHOR
-
-Ricardo SIGNES, C<< <rjbs@cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-querylet@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org>.  I will be notified, and then you'll automatically be
-notified of progress on your bug as I make changes.
-
-=head1 COPYRIGHT
-
-Copyright 2004 Ricardo SIGNES, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
 
 =cut
 
