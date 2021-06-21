@@ -1,6 +1,8 @@
 Revision history for Querylet
 
 {{$NEXT}}
+
+0.402     2021-06-20 21:33:48-04:00 America/New_York
         - update author information
         - add note about support level to docs
 
